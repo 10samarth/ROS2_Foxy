@@ -1,0 +1,28 @@
+# ROS specific ignores
+*.bak
+*.msg
+*.srv
+*.action
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+devel/
+install/
+logs/
+test_results/
+*.log
+*.db
+*.pkl
+
+# System ignores
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.egg-info/
+dist/
+build/
+*.bak

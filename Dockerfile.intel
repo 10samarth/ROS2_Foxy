@@ -1,17 +1,24 @@
-# Use Ubuntu 20.04 as base image
 FROM ubuntu:22.04
 
 # Set environment variables
 ENV ROS_DISTRO humble
 ENV DEBIAN_FRONTEND noninteractive
 
-# Install necessary packages
+# Install librealsense2
 RUN apt-get update && apt-get install -y \
     curl \
     gnupg2 \
     lsb-release \
     sudo \
     tzdata \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install necessary packages for librealsense2
+RUN curl https://raw.githubusercontent.com/IntelRealSense/librealsense/master/doc/distribution_linux.md | sudo tee /etc/apt/sources.list.d/realsense.list
+RUN sudo apt-get update && sudo apt-get install -y \
+    librealsense2-dkms \
+    librealsense2-utils \
+    librealsense2-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up ROS2 sources and keys
@@ -34,7 +41,6 @@ RUN apt-get update && apt-get install -y \
     ros-humble-ros-base \
     && rm -rf /var/lib/apt/lists/*
 
-
 # Initialize rosdep
 RUN rosdep init && rosdep update
 
@@ -48,7 +54,7 @@ RUN rosdep install --from-paths src --ignore-src -y
 RUN colcon build
 
 # Source ROS2 setup file
-RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
+RUN echo "source /opt/ros/foxy/setup.bash" >> /root/.bashrc
 
 # Set up the entry point
 CMD ["bash"]
